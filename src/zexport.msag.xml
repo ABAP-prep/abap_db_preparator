@@ -98,6 +98,12 @@
      <MSGNR>014</MSGNR>
      <TEXT>&amp;1 is a invalid name.</TEXT>
     </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZEXPORT</ARBGB>
+     <MSGNR>015</MSGNR>
+     <TEXT>Cluster-Tables can only be added, when a table type is defined.</TEXT>
+    </T100>
    </T100>
    <LONGTEXTS>
     <item>
@@ -242,7 +248,141 @@
       </TLINE>
      </LINES>
     </item>
+    <item>
+     <DOKIL>
+      <ID>NA</ID>
+      <OBJECT>ZEXPORT015</OBJECT>
+      <LANGU>E</LANGU>
+      <TYP>E</TYP>
+      <VERSION>0001</VERSION>
+      <MASTERLANG>X</MASTERLANG>
+      <TXTLINES>00004</TXTLINES>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>ZEXPORT015</TDNAME>
+      <TDID>NA</TDID>
+      <TDSPRAS>E</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00001</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>&amp;CAUSE&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Cluster-Tables need a table type defined in ABAP-dictionary in order</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>=</TDFORMAT>
+       <TDLINE> to be added to the test data container.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>&amp;WHAT_TO_DO&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Please create a table type for dictionary structure &amp;V1&amp; of kind</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>=</TDFORMAT>
+       <TDLINE> standard table.</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
    </LONGTEXTS>
+   <I18N_LANGS>
+    <LANGU>C</LANGU>
+   </I18N_LANGS>
+   <T100T>
+    <T100T>
+     <SPRSL>C</SPRSL>
+     <ARBGB>ZEXPORT</ARBGB>
+     <STEXT>Export in Cluster</STEXT>
+    </T100T>
+   </T100T>
+   <T100_TEXTS>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>000</MSGNR>
+     <TEXT>Testcase &amp;1 already exists. Overwritting is not active.</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>001</MSGNR>
+     <TEXT>Import is just allowed when dangerous testclasses can be executed.</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>002</MSGNR>
+     <TEXT>Please add some tables to the bundle</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>003</MSGNR>
+     <TEXT>Table &amp;1 is used more than one time</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>004</MSGNR>
+     <TEXT>&amp;1 doesn&apos;t exists</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>005</MSGNR>
+     <TEXT>&amp;1 isn&apos;t a database table</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>006</MSGNR>
+     <TEXT>Download of file &amp;1 failed (reason: &amp;2)</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>007</MSGNR>
+     <TEXT>Testdatacontainer &amp;1 already exists. Overwritting is not active.</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>008</MSGNR>
+     <TEXT>The where-clause for table &amp;1 is invalid.</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>009</MSGNR>
+     <TEXT>The transport request &amp;1 must exists and must be open.</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>010</MSGNR>
+     <TEXT>The content-handler &amp;1 is invalid.</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>011</MSGNR>
+     <TEXT>The name can&apos;t be changed, if the table isn&apos;t reexported (table &amp;1)</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>012</MSGNR>
+     <TEXT>Can&apos;t find bundle with id &amp;1</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>013</MSGNR>
+     <TEXT>FOR ALL ENTRIES IN is only possible when table &amp;1 is not empty.</TEXT>
+    </item>
+    <item>
+     <SPRSL>C</SPRSL>
+     <MSGNR>014</MSGNR>
+     <TEXT>&amp;1 is a invalid name.</TEXT>
+    </item>
+   </T100_TEXTS>
   </asx:values>
  </asx:abap>
 </abapGit>
