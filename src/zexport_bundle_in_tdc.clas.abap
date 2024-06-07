@@ -63,6 +63,7 @@ CLASS zexport_bundle_in_tdc DEFINITION
       RETURNING
         VALUE(name) TYPE etp_name
       RAISING
+        zcx_export_error
         cx_ecatt_tdc_access .
     METHODS set_parameter_value
       IMPORTING
@@ -76,6 +77,25 @@ CLASS zexport_bundle_in_tdc DEFINITION
         !table_name   TYPE tabname
       RETURNING
         VALUE(result) TYPE etp_name .
+    METHODS get_parameter_definition
+      IMPORTING
+        !table_name   TYPE tabname
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        zcx_export_error.
+    METHODS search_for_table_types
+      IMPORTING
+        !table_name   TYPE tabname
+      RETURNING
+        VALUE(result) TYPE ttypename
+      RAISING
+        zcx_export_error.
+    METHODS is_cluster_table
+      IMPORTING
+        !table_name   TYPE tabname
+      RETURNING
+        VALUE(result) TYPE sap_bool .
 ENDCLASS.
 
 
@@ -156,8 +176,7 @@ CLASS ZEXPORT_BUNDLE_IN_TDC IMPLEMENTATION.
   METHOD create_parameter.
     DATA: type_definition TYPE string.
 
-    CONCATENATE 'STANDARD TABLE OF' table INTO type_definition
-      SEPARATED BY space.
+    type_definition = get_parameter_definition( table ).
     name = get_parameter_name( table ).
 
     TRY.
@@ -202,11 +221,82 @@ CLASS ZEXPORT_BUNDLE_IN_TDC IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD get_parameter_definition.
+
+    " search for table types first as type "standard table of" for cluster tables
+    " is changed to character like type in TDC, which causes a dump
+    result = search_for_table_types( table_name ).
+    IF result IS NOT INITIAL.
+      RETURN.
+    ENDIF.
+
+    CONCATENATE 'STANDARD TABLE OF' table_name INTO result
+      SEPARATED BY space.
+
+  ENDMETHOD.
+
+
   METHOD get_parameter_name.
 
     result = table_name.
     REPLACE ALL OCCURRENCES OF REGEX '[^A-Za-z0-9_\s]'
       IN result WITH '_'.
+
+  ENDMETHOD.
+
+
+  METHOD is_cluster_table.
+
+    SELECT COUNT(*) FROM dd02l
+      WHERE tabname = @table_name AND as4local = 'A' AND tabclass = 'CLUSTER'.
+    result = xsdbool( sy-subrc = 0 ).
+
+  ENDMETHOD.
+
+
+  METHOD search_for_table_types.
+    DATA:
+      objects_to_search    TYPE STANDARD TABLE OF rsfind,
+      scope_object_classes TYPE STANDARD TABLE OF seu_obj,
+      found_table_types    TYPE STANDARD TABLE OF rsfindlst,
+      table_type_range     TYPE RANGE OF ttypename.
+
+    objects_to_search = VALUE #( ( object = table_name ) ).
+    scope_object_classes = VALUE #( ( 'DA' ) ).
+    CALL FUNCTION 'RS_EU_CROSSREF'
+      EXPORTING
+        i_find_obj_cls               = 'DS'
+        i_answer                     = 'N'
+        no_dialog                    = abap_true
+        expand_source_in_online_mode = abap_true
+        rekursiv                     = abap_true
+      TABLES
+        i_findstrings                = objects_to_search
+        i_scope_object_cls           = scope_object_classes
+        o_founds                     = found_table_types
+      EXCEPTIONS
+        OTHERS                       = 4.
+    IF ( sy-subrc <> 0 OR found_table_types IS INITIAL )
+        AND is_cluster_table( table_name ) = abap_true.
+      RAISE EXCEPTION TYPE zcx_export_cluster_table
+        EXPORTING
+          table_name = table_name.
+    ELSEIF found_table_types IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    table_type_range = VALUE #(
+      FOR <table_type> IN found_table_types
+      ( sign = 'I' option = 'EQ' low = <table_type>-object ) ).
+    SELECT typename FROM dd40l
+      WHERE typename IN @table_type_range AND as4local = 'A' AND accessmode = 'T'
+      INTO @result.
+    ENDSELECT.
+    IF sy-subrc <> 0 AND is_cluster_table( table_name ) = abap_true.
+      RAISE EXCEPTION TYPE zcx_export_cluster_table
+        EXPORTING
+          table_name = table_name.
+    ENDIF.
 
   ENDMETHOD.
 
